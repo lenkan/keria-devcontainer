@@ -16,6 +16,25 @@ configs:
               "http://witness-demo:5644/oobi/BIKKuvBwpmDVA4Ds-EpL5bt9OqPzWPja2LigFYZN2YfX/controller"
           ]
       }
+  keria_launch:
+    content: |
+      {
+          "version": "0.2.0",
+          "configurations": [
+              {
+                  "name": "Python Debugger: Launch Keria",
+                  "type": "debugpy",
+                  "request": "launch",
+                  "console": "integratedTerminal",
+                  "module": "keria",
+                  "args": [
+                      "start",
+                      "--config-file",
+                      "keria"
+                  ]
+              }
+          ]
+      }
   wan:
     content: |
       {
@@ -87,6 +106,8 @@ services:
     configs:
       - source: keria
         target: /usr/local/var/keri/cf/keria.json
+      - source: keria_launch
+        target: /root/keria/.vscode/launch.json
     volumes:
       - ../keria:/root/keria
       - ../keripy:/root/keripy
