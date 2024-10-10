@@ -16,7 +16,7 @@ configs:
               "http://witness-demo:5644/oobi/BIKKuvBwpmDVA4Ds-EpL5bt9OqPzWPja2LigFYZN2YfX/controller"
           ]
       }
-  wan.json:
+  wan:
     content: |
       {
           "dt": "2022-01-20T12:57:59.823350+00:00",
@@ -25,7 +25,7 @@ configs:
               "curls": ["http://witness-demo:5642/"]
           }
       }
-  wil.json:
+  wil:
     content: |
       {
           "dt": "2022-01-20T12:57:59.823350+00:00",
@@ -34,7 +34,7 @@ configs:
               "curls": ["http://witness-demo:5643/"]
           }
       }
-  wes.json:
+  wes:
     content: |
       {
           "dt": "2022-01-20T12:57:59.823350+00:00",
@@ -72,11 +72,11 @@ services:
       retries: 5
       start_period: 2s
     configs:
-      - source: wan.json
+      - source: wan
         target: /usr/local/var/keri/cf/wan.json
-      - source: wes.json
+      - source: wes
         target: /usr/local/var/keri/cf/wes.json
-      - source: wil.json
+      - source: wil
         target: /usr/local/var/keri/cf/wil.json
     ports:
       - 5642:5642
@@ -88,14 +88,26 @@ services:
       - source: keria
         target: /usr/local/var/keri/cf/keria.json
     volumes:
-      # - ../keria:/root/keria
-      # - ../keripy:/root/keripy
-      - ../..:/workspaces:cached
+      - ../keria:/root/keria
+      - ../keripy:/root/keripy
       - site-packages:/usr/local/lib/python3.12/site-packages
-    working_dir: /workspaces/keria
+    working_dir: /root/keria
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile_inline: |
+        FROM python:3.12.3-alpine3.20
+        RUN apk add --no-cache \
+            bash \
+            curl \
+            build-base \
+            alpine-sdk \
+            libffi-dev \
+            libsodium \
+            libsodium-dev \
+            git
+        RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        ENV PATH="/root/.cargo/bin:$$PATH"
+
     command: sleep infinity
     ports:
       - 3901:3901
