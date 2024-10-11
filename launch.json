@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Launch Keria",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "module": "keria",
+            "args": [
+                "start",
+                "--config-file",
+                "keria",
+                "--config-dir",
+                "${cwd}/scripts"
+            ]
+        }
+    ]
+}
