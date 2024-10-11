@@ -107,28 +107,16 @@ services:
       - source: keria
         target: /usr/local/var/keri/cf/keria.json
       - source: keria_launch
-        target: /root/keria/.vscode/launch.json
+        target: /home/${USERNAME}/code/keria/.vscode/launch.json
     volumes:
-      - ../keria:/root/keria
-      - ../keripy:/root/keripy
-      - site-packages:/usr/local/lib/python3.12/site-packages
-    working_dir: /root/keria
+      - ../keria:/home/${USERNAME}/code/keria
+      - ../keripy:/home/${USERNAME}/code/keripy
+    working_dir: /home/${USERNAME}/code/keria
     build:
       context: .
-      dockerfile_inline: |
-        FROM python:3.12.3-alpine3.20
-        RUN apk add --no-cache \
-            bash \
-            curl \
-            build-base \
-            alpine-sdk \
-            libffi-dev \
-            libsodium \
-            libsodium-dev \
-            git
-        RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        ENV PATH="/root/.cargo/bin:$$PATH"
-
+      args:
+        - UID=${UID}
+        - USERNAME=${USERNAME}
     command: sleep infinity
     ports:
       - 3901:3901
