@@ -10,9 +10,7 @@
             "args": [
                 "start",
                 "--config-file",
-                "keria",
-                "--config-dir",
-                "${cwd}/scripts"
+                "keria"
             ]
         }
     ]

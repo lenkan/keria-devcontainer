@@ -73,7 +73,8 @@ services:
     volumes:
       - ../keria:/home/${USERNAME}/code/keria
       - ../keripy:/home/${USERNAME}/code/keripy
-      - ./keria.json:/home/${USERNAME}/code/keria/scripts/keri/cf/keria.json
+      - ./.keri:/home/${USERNAME}/.keri
+      - ./keria.json:/home/${USERNAME}/.keri/cf/keria.json
       - ./launch.json:/home/${USERNAME}/code/keria/.vscode/launch.json
     working_dir: /home/${USERNAME}/code/keria
     build:
