@@ -10,7 +10,9 @@
             "args": [
                 "start",
                 "--config-file",
-                "keria"
+                "docker",
+                "--config-dir",
+                "${cwd}/config"
             ]
         }
     ]
