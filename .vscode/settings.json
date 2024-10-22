@@ -1,0 +1,6 @@
+{
+    "[python]": {
+        "diffEditor.ignoreTrimWhitespace": false
+        // "interp"
+    },
+}

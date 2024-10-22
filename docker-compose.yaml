@@ -1,0 +1,84 @@
+configs:
+  keria.json:
+    content: |
+  wan.json:
+    content: |
+      {
+          "dt": "2022-01-20T12:57:59.823350+00:00",
+          "wan": {
+              "dt": "2022-01-20T12:57:59.823350+00:00",
+              "curls": ["http://witness-demo:5642/"]
+          }
+      }
+  wil.json:
+    content: |
+      {
+          "dt": "2022-01-20T12:57:59.823350+00:00",
+          "wil": {
+              "dt": "2022-01-20T12:57:59.823350+00:00",
+              "curls": ["http://witness-demo:5643/"]
+          }
+      }
+  wes.json:
+    content: |
+      {
+          "dt": "2022-01-20T12:57:59.823350+00:00",
+          "wes": {
+              "dt": "2022-01-20T12:57:59.823350+00:00",
+              "curls": ["http://witness-demo:5644/"]
+          }
+      }
+
+services:
+  vlei-server:
+    image: gleif/vlei
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONIOENCODING=UTF-8
+    command: ["vLEI-server", "-s", "./schema/acdc", "-c", "./samples/acdc/", "-o", "./samples/oobis/"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7723/oobi/EBfdlu8R27Fbx-ehrqwImnK-8Cm79sqbAQ4MmvEAYqao"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+      start_period: 2s
+
+  witness-demo:
+    image: weboftrust/keri-witness-demo:1.1.0
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONIOENCODING=UTF-8
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5642/oobi"]
+      interval: 2s
+      timeout: 3s
+      retries: 5
+      start_period: 2s
+    configs:
+      - source: wan.json
+        target: /keripy/scripts/keri/cf/main/wan.json
+      - source: wes.json
+        target: /keripy/scripts/keri/cf/main/wes.json
+      - source: wil.json
+        target: /keripy/scripts/keri/cf/main/wil.json
+
+  keria:
+    depends_on:
+      vlei-server:
+        condition: service_healthy
+      witness-demo:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # args:
+    environment:
+      - KERI_AGENT_CORS=1
+      - PYTHONUNBUFFERED=1
+      - PYTHONIOENCODING=UTF-8
+    volumes:
+      - .:/workspace:cached
+    ports:
+      - 3901:3901
+      - 3902:3902
+      - 3903:3903

@@ -1,26 +1,20 @@
 {
-    "build": {
-        "dockerfile": "Dockerfile",
-        "args": {
-            "USERNAME": "lenkan",
-            "UID": "1002"
-        }
-    },
-    "runArgs": [
-        "--name",
-        "keria-devcontainer"
+    "dockerComposeFile": [
+        "./docker-compose.yaml"
     ],
+    "service": "keria",
     "customizations": {
         "vscode": {
             "extensions": [
-                "ms-python.python"
-            ]
+                "ms-python.python",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "python.terminal.activateEnvInCurrentTerminal": true,
+                "python.defaultInterpreterPath": ".venv/bin/python"
+            }
         }
     },
-    "name": "keria-devcontainer",
-    "appPort": [
-        "3901:3901",
-        "3902:3902",
-        "3903:3903"
-    ]
+    "workspaceFolder": "/workspace",
+    "postCreateCommand": "./scripts/install.sh"
 }

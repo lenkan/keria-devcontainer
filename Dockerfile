@@ -10,6 +10,7 @@ RUN add-apt-repository ppa:deadsnakes/ppa \
         bash \
         jq \
         libsodium-dev \
+        curl \
         git
 
 ARG USERNAME=keria
@@ -21,3 +22,5 @@ WORKDIR /home/${USERNAME}
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 ENV PATH="~/.cargo/bin:${PATH}"
+
+CMD ["sleep", "infinity"]
