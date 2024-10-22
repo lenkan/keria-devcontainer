@@ -19,3 +19,6 @@ USER ${USERNAME}
 WORKDIR /home/${USERNAME}
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+RUN python3 -m venv venv
+
+ENV PATH="~/.cargo/bin:~/venv/bin:${PATH}"
